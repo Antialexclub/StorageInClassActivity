@@ -50,10 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun downloadComic (comicId: String) {
         val url = "https://xkcd.com/$comicId/info.0.json"
         requestQueue.add (
-            JsonObjectRequest(url
-                , {showComic(it)}
-                , {}
-            )
+            JsonObjectRequest(Request.Method.GET, url, null, { showComic(it) }, { })
         )
     }
 
@@ -66,7 +63,13 @@ class MainActivity : AppCompatActivity() {
 
     // Implement this function
     private fun saveComic(comicObject: JSONObject) {
-
+        val prefs = getSharedPreferences("comic_prefs", MODE_PRIVATE)
+        prefs.edit()
+            .putString("title", comicObject.getString("title"))
+            .putString("alt",   comicObject.getString("alt"))
+            .putString("img",   comicObject.getString("img"))
+            .putString("num",   comicObject.getString("num"))
+            .apply()
     }
 
 
